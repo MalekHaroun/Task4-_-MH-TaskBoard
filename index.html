@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f3f8fc">
+  <meta name="description" content="MH-TaskBoard is a responsive workspace for organising work across To Do, In Progress and Completed.">
+  <title>MH-TaskBoard — Smart Task Workspace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#board">Skip to task board</a>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="MH-TaskBoard home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>MH-TaskBoard<span class="brand-period">.</span></span>
+      </a>
+      <div class="topbar-actions">
+        <span class="saved-indicator"><span class="saved-dot" aria-hidden="true"></span> Saved on this device</span>
+        <button class="icon-button theme-toggle" id="theme-toggle" type="button" aria-label="Switch to dark mode" title="Switch theme">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+        </button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="intro" aria-labelledby="page-title">
+        <div>
+          <h1 id="page-title">Stay ahead of <span>every task.</span></h1>
+        </div>
+        <div class="today-card">
+          <span class="today-label">TODAY</span>
+          <strong id="today-date">—</strong>
+          <span class="today-note">One task at a time.</span>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Task workspace">
+        <section class="composer panel" aria-labelledby="composer-title">
+          <div class="composer-heading">
+            <div class="plus-mark" aria-hidden="true">+</div>
+            <div>
+              <h3 id="composer-title">Add a new task</h3>
+              <p>Capture it now, organise it as you go.</p>
+            </div>
+          </div>
+          <form id="task-form" class="task-form">
+            <div class="field field-title">
+              <label for="task-title">Task name <span class="required-mark">*</span></label>
+              <input id="task-title" name="title" type="text" maxlength="90" placeholder="e.g. Prepare project presentation" autocomplete="off" required>
+            </div>
+            <div class="field field-description">
+              <label for="task-description">Description <span class="optional-mark">OPTIONAL</span></label>
+              <input id="task-description" name="description" type="text" maxlength="220" placeholder="Add a few details…">
+            </div>
+            <div class="form-bottom-row">
+              <div class="field field-select">
+                <label for="task-category">Category</label>
+                <select id="task-category" name="category" required>
+                  <option value="" disabled selected>Choose category</option>
+                  <option value="Development">Development</option>
+                  <option value="Design">Design</option>
+                  <option value="Marketing">Marketing</option>
+                  <option value="Research">Research</option>
+                  <option value="Personal">Personal</option>
+                </select>
+              </div>
+              <div class="field field-select">
+                <label for="task-priority">Priority</label>
+                <select id="task-priority" name="priority" required>
+                  <option value="" disabled selected>Choose priority</option>
+                  <option value="Low">Low</option>
+                  <option value="Medium">Medium</option>
+                  <option value="High">High</option>
+                </select>
+              </div>
+              <button class="primary-button" type="submit"><span aria-hidden="true">+</span> Add task</button>
+            </div>
+          </form>
+        </section>
+
+        <div class="section-heading">
+          <div>
+            <h2>Task board</h2>
+          </div>
+          <button class="text-button" id="clear-completed" type="button" disabled>Clear completed <span aria-hidden="true">↗</span></button>
+        </div>
+
+        <div class="board-toolbar">
+          <div class="board-toolbar-copy">
+            <span id="visible-summary">Showing all tasks</span>
+          </div>
+          <div class="filters" role="search" aria-label="Filter tasks">
+            <label class="search-field" for="search-input">
+              <span aria-hidden="true">⌕</span>
+              <input id="search-input" type="search" placeholder="Search tasks…" autocomplete="off">
+            </label>
+            <label class="select-filter">
+              <span class="visually-hidden">Filter by category</span>
+              <select id="category-filter">
+                <option value="All">All categories</option>
+                <option value="Development">Development</option>
+                <option value="Design">Design</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Research">Research</option>
+                <option value="Personal">Personal</option>
+              </select>
+            </label>
+            <button class="reset-filter" id="reset-filters" type="button" title="Reset filters" aria-label="Reset filters">↺</button>
+          </div>
+        </div>
+
+        <section class="board" id="board" aria-label="Kanban task board">
+          <section class="column column-todo" data-status="todo" aria-labelledby="todo-heading">
+            <header class="column-header">
+              <div class="column-title-wrap"><span class="status-dot todo-dot" aria-hidden="true"></span><h3 id="todo-heading">To Do</h3></div>
+              <span class="column-count" id="count-todo">0</span>
+            </header>
+            <div class="task-list" id="list-todo" aria-label="To Do tasks"></div>
+          </section>
+
+          <section class="column column-progress" data-status="in-progress" aria-labelledby="progress-heading">
+            <header class="column-header">
+              <div class="column-title-wrap"><span class="status-dot progress-dot" aria-hidden="true"></span><h3 id="progress-heading">In Progress</h3></div>
+              <span class="column-count" id="count-in-progress">0</span>
+            </header>
+            <div class="task-list" id="list-in-progress" aria-label="In Progress tasks"></div>
+          </section>
+
+          <section class="column column-completed" data-status="completed" aria-labelledby="completed-heading">
+            <header class="column-header">
+              <div class="column-title-wrap"><span class="status-dot completed-dot" aria-hidden="true"></span><h3 id="completed-heading">Completed</h3></div>
+              <span class="column-count" id="count-completed">0</span>
+            </header>
+            <div class="task-list" id="list-completed" aria-label="Completed tasks"></div>
+          </section>
+        </section>
+      </section>
+
+      <section class="overview" aria-label="Task overview">
+        <article class="overview-card overview-total">
+          <div class="overview-icon" aria-hidden="true">▤</div>
+          <div><span class="overview-label">Total tasks</span><strong id="total-count">0</strong></div>
+        </article>
+        <article class="overview-card overview-active">
+          <div class="overview-icon" aria-hidden="true">◷</div>
+          <div><span class="overview-label">Still in motion</span><strong id="active-count">0</strong></div>
+        </article>
+        <article class="overview-card overview-done">
+          <div class="overview-icon" aria-hidden="true">✓</div>
+          <div><span class="overview-label">Completed</span><strong id="completed-count">0</strong></div>
+        </article>
+        <div class="overview-progress" aria-label="Completion progress">
+          <div class="progress-copy"><span>Progress</span><strong id="progress-label">0%</strong></div>
+          <div class="progress-track"><span id="progress-bar"></span></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span><span class="footer-mark">✳</span> A calmer way to get things done.</span>
+      <span>MH-TaskBoard <span id="footer-year"></span></span>
+    </footer>
+  </div>
+
+  <dialog class="edit-dialog" id="edit-dialog" aria-labelledby="edit-dialog-title">
+    <form id="edit-form" class="dialog-form">
+      <div class="dialog-heading">
+        <div><p class="eyebrow">MAKE AN UPDATE</p><h2 id="edit-dialog-title">Edit task</h2></div>
+        <button class="icon-button dialog-close" id="close-dialog" type="button" aria-label="Close dialog">×</button>
+      </div>
+      <input id="edit-id" type="hidden">
+      <div class="field">
+        <label for="edit-title">Task name</label>
+        <input id="edit-title" type="text" maxlength="90" required>
+      </div>
+      <div class="field">
+        <label for="edit-description">Description <span class="optional-mark">OPTIONAL</span></label>
+        <textarea id="edit-description" rows="3" maxlength="220" placeholder="Add a few details…"></textarea>
+      </div>
+      <div class="dialog-fields-row">
+        <div class="field">
+          <label for="edit-category">Category</label>
+          <select id="edit-category" required>
+            <option value="Development">Development</option><option value="Design">Design</option><option value="Marketing">Marketing</option><option value="Research">Research</option><option value="Personal">Personal</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="edit-priority">Priority</label>
+          <select id="edit-priority" required>
+            <option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option>
+          </select>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button class="secondary-button" id="cancel-edit" type="button">Cancel</button>
+        <button class="primary-button" type="submit">Save changes</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
